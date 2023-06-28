@@ -1,0 +1,18 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "cSpell.words": [
+    "ahooks",
+    "antd",
+    "Appstore",
+    "clonedeep",
+    "craco",
+    "dispath",
+    "immer",
+    "mockjs",
+    "questioneer",
+    "reduxjs",
+    "wenjuan"
+  ]
+}
