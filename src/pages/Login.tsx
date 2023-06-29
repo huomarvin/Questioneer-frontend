@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Typography, Space, Form, Input, Button, Checkbox, message } from 'antd';
 import { UserAddOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { REGISTER_PATHNAME, MANAGE_INDEX_PATHNAME } from '@/router';
+import { REGISTER_PATHNAME, MANAGE_LIST_PATHNAME } from '@/router';
 import { loginService } from '@/services/user';
 import { setToken } from '@/utils/user-token';
 import { useDispatch } from 'react-redux';
@@ -53,7 +53,7 @@ const Login: FC = () => {
         setToken(access_token); // 存储 token
         dispatch(loginReducer({ token: access_token }));
         message.success('登录成功');
-        nav(MANAGE_INDEX_PATHNAME); // 导航到“我的问卷”
+        nav(MANAGE_LIST_PATHNAME); // 导航到“我的问卷”
       },
     }
   );

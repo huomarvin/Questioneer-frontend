@@ -8,3 +8,6 @@ export const SIGN_UP_PATH = `${BASE_PATH}/auth/signup`;
 
 // 登录
 export const SIGN_IN_PATH = `${BASE_PATH}/auth/signin`;
+
+// 调查相关的基础rest路径
+export const SURVEY_PATH = `${BASE_PATH}/survey`;
