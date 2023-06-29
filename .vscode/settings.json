@@ -7,12 +7,15 @@
     "antd",
     "Appstore",
     "clonedeep",
+    "commitlint",
+    "contants",
     "craco",
     "dispath",
     "immer",
     "mockjs",
     "questioneer",
     "reduxjs",
+    "signin",
     "wenjuan"
   ]
 }
