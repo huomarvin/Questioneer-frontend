@@ -28,8 +28,9 @@ instance.interceptors.response.use(
   error => {
     console.log('🚀 ~ file: ajax.ts:24 ~ error:', error);
     let msg = error.message;
+    const response = error?.response;
     if (error.code === 'ERR_BAD_REQUEST') {
-      const newMsg = error?.response?.data?.error;
+      const newMsg = response?.data?.error;
       if (newMsg) {
         msg = JSON.stringify(newMsg);
       }

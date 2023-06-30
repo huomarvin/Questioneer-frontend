@@ -15,3 +15,9 @@ export const getSurveyService = async (id: string): Promise<ResDataType> => {
 export const getSurveyServiceList = async (params: any): Promise<ResDataType> => {
   return (await axios.get(`${SURVEY_PATH}`, { params })) as ResDataType;
 };
+
+// 更新调查问卷信息
+export const updateSurveyService = async (id: string, body: any): Promise<ResDataType> => {
+  console.log('🚀 ~ file: survey.ts:21 ~ updateSurveyService ~ body:', body);
+  return (await axios.put(`${SURVEY_PATH}/${id}`, body)) as ResDataType;
+};

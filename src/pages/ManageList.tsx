@@ -1,8 +1,10 @@
 import React from 'react';
 import useSurveyListData from '@/hooks/useSurveyListData';
-import { Table, Tag } from 'antd';
+import { Space, Table, Tag } from 'antd';
 import ListContent from '@/components/ListContent';
 import Pagination from '@/components/Pagination';
+import { Link } from 'react-router-dom';
+import { QUESTION_EDIT_PATHNAME, QUESTION_STAT_PATHNAME } from '@/router';
 
 const ManageList = () => {
   const { data, loading } = useSurveyListData();
@@ -11,6 +13,19 @@ const ManageList = () => {
     {
       title: '问卷标题',
       dataIndex: 'title',
+      render: (title: string, record: any) => {
+        return (
+          <Link
+            className="text-blue-500"
+            to={
+              (record.isPublished ? QUESTION_STAT_PATHNAME : QUESTION_EDIT_PATHNAME) +
+              `/${record._id}`
+            }
+          >
+            <Space>{title}</Space>
+          </Link>
+        );
+      },
     },
     {
       title: '是否发布',

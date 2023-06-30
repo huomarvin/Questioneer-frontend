@@ -5,10 +5,14 @@ import { Button, Divider, Space, message } from 'antd';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { createSurveyService } from '@/services/survey';
 import { BarsOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import useGuardPage from '@/hooks/useGuardPage';
+import useLoadUserData from '@/hooks/useLoadUserData';
 
 // 管理端布局
 const ManageLayout = () => {
   const nav = useNavigate();
+  const { waitingUserData } = useLoadUserData();
+  useGuardPage(waitingUserData);
   const { loading, run: handleCreateClick } = useRequest(createSurveyService, {
     manual: true,
     onSuccess(result) {

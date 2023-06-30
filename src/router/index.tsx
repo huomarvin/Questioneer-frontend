@@ -7,7 +7,8 @@ import NotFound from '@/pages/NotFound';
 import ManageLayout from '@/layouts/ManageLayout';
 import ManageList from '@/pages/ManageList';
 import QuestionLayout from '@/layouts/QuestionLayout';
-import QuestionEdit from '@/pages/QuestionEdit';
+import QuestionEdit from '@/pages/QuestionEdit/index';
+import QuestionStat from '@/pages/QuestionStat';
 
 export const HOME_PATHNAME = '/';
 export const LOGIN_PATHNAME = '/login';
@@ -15,11 +16,13 @@ export const REGISTER_PATHNAME = '/register';
 export const MANAGE_INDEX_PATHNAME = '/manage';
 export const LIST = 'list';
 export const EDIT = 'edit';
+export const STAT = 'stat';
 export const TRASH = 'trash';
 export const QUESTION_INDEX_PATHNAME = '/question';
 export const MANAGE_LIST_PATHNAME = `${MANAGE_INDEX_PATHNAME}/${LIST}`;
 export const QUESTION_EDIT_PATHNAME = `${QUESTION_INDEX_PATHNAME}/${EDIT}`;
 export const MANAGE_TRASH_PATHNAME = `${MANAGE_INDEX_PATHNAME}/${TRASH}`;
+export const QUESTION_STAT_PATHNAME = `${QUESTION_INDEX_PATHNAME}/${STAT}`;
 
 export function isLoginOrRegister(pathname: string) {
   if ([LOGIN_PATHNAME, REGISTER_PATHNAME].includes(pathname)) return true;
@@ -71,6 +74,10 @@ const router = createBrowserRouter([
       {
         path: `${EDIT}/:id`,
         element: <QuestionEdit />,
+      },
+      {
+        path: `${STAT}/:id`,
+        element: <QuestionStat />,
       },
     ],
   },
