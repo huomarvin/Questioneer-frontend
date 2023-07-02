@@ -38,7 +38,7 @@ function useLoadSurveyData() {
     }
 
     // 把 componentList 存储到 Redux store 中
-    dispatch(resetComponents({ componentList, selectedId }));
+    dispatch(resetComponents({ componentList, selectedId, copiedComponent: null }));
     dispatch(resetPageInfo({ title, desc, js, css, isPublished }));
   }, [data, dispatch]);
 

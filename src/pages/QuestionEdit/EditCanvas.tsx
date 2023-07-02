@@ -25,18 +25,20 @@ const EditCanvas = () => {
   return (
     <div className="flex-1">
       <div className=" w-96 mx-auto bg-slate-50 p-4">
-        {componentList.map((component: ComponentInfoType) => {
-          const { fe_id } = component;
-          const classNames = classnames({
-            'mt-4 cursor-pointer hover:bg-slate-100 p-3 rounded border': true,
-            'border-sky-500 hover:border-sky-600': fe_id === selectedId,
-          });
-          return (
-            <div className={classNames} key={fe_id} onClick={event => handleClick(event, fe_id)}>
-              <div className=" pointer-events-none">{genComponent(component)}</div>
-            </div>
-          );
-        })}
+        {componentList
+          .filter(x => !x.isHidden)
+          .map((component: ComponentInfoType) => {
+            const { fe_id } = component;
+            const classNames = classnames({
+              'mt-4 cursor-pointer hover:bg-slate-100 p-3 rounded border': true,
+              'border-sky-500 hover:border-sky-600': fe_id === selectedId,
+            });
+            return (
+              <div className={classNames} key={fe_id} onClick={event => handleClick(event, fe_id)}>
+                <div className=" pointer-events-none">{genComponent(component)}</div>
+              </div>
+            );
+          })}
       </div>
     </div>
   );

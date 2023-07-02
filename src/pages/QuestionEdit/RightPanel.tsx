@@ -8,7 +8,7 @@ function RightPanel() {
   const dispatch = useDispatch();
   const { selectedComponent } = useGetComponentInfo();
   if (!selectedComponent) return null;
-  const { type, props } = selectedComponent;
+  const { type, props, isHidden, isLocked } = selectedComponent;
   const conf = getComponentConfByType(type);
   if (!conf) return null;
   const PropsEditor = conf.PropsEditor;
@@ -16,8 +16,8 @@ function RightPanel() {
     dispatch(updateComponent(newProps));
   };
   return (
-    <div className="p-6 bg-slate-100">
-      <PropsEditor {...props} onChange={onChange} />
+    <div className="p-6 bg-slate-100 w-56">
+      <PropsEditor {...props} onChange={onChange} disabled={isHidden || isLocked} />
     </div>
   );
 }
