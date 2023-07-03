@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 
 function useGetComponentInfo() {
   const { componentList, selectedId, copiedComponent } = useSelector<StateType, SurveyStateType>(
-    state => state.survey
+    state => state.survey.present
   );
   return {
     componentList,

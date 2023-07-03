@@ -1,6 +1,8 @@
 import produce from 'immer';
 import { ComponentPropsType } from '@/components/QuestionComponents';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit';
+import cloneDeep from 'lodash/cloneDeep';
+import { arrayMove } from '@dnd-kit/sortable';
 
 export type ComponentInfoType = {
   fe_id: string;
@@ -31,8 +33,7 @@ export const surveySlice = createSlice({
       return action.payload;
     }),
     addComponent: produce((state: SurveyStateType, action: PayloadAction<ComponentInfoType>) => {
-      state.componentList.push(action.payload);
-      state.selectedId = action.payload.fe_id;
+      insertNewComponent(state, action.payload);
     }),
     changeSelectedId: produce((state: SurveyStateType, action: PayloadAction<string>) => {
       state.selectedId = action.payload;
@@ -92,14 +93,22 @@ export const surveySlice = createSlice({
       (draft: SurveyStateType, action: PayloadAction<{ oldIndex: number; newIndex: number }>) => {
         const { componentList } = draft;
         const { oldIndex, newIndex } = action.payload;
-
-        const oldComponent = componentList[oldIndex];
-        const newComponent = componentList[newIndex];
-
-        componentList[newIndex] = oldComponent;
-        componentList[oldIndex] = newComponent;
+        // arrayMove返回的是一个新的数组，不是移动的原数组，这个地方需要重新赋值
+        draft.componentList = arrayMove(componentList, oldIndex, newIndex);
       }
     ),
+    copySelectedComponent: produce((draft: SurveyStateType) => {
+      const { selectedId, componentList = [] } = draft;
+      const selectedComponent = componentList.find(c => c.fe_id === selectedId);
+      if (selectedComponent == null) return;
+      draft.copiedComponent = cloneDeep(selectedComponent);
+    }),
+    pasteCopiedComponent: produce((draft: SurveyStateType) => {
+      const { copiedComponent } = draft;
+      if (copiedComponent == null) return;
+      copiedComponent.fe_id = nanoid();
+      insertNewComponent(draft, copiedComponent);
+    }),
   },
 });
 
@@ -119,6 +128,24 @@ function getNextId(componentList: Array<ComponentInfoType>, index: number): stri
   return componentList[index + 1].fe_id;
 }
 
+/**
+ * 新增组件
+ * @param draft 状态列表
+ * @param copiedComponent 待添加组件
+ * @returns
+ */
+function insertNewComponent(draft: SurveyStateType, copiedComponent: ComponentInfoType | null) {
+  if (copiedComponent == null) return;
+  const { componentList, selectedId } = draft;
+  const index = componentList.findIndex(c => c.fe_id === selectedId);
+  if (index === -1) {
+    componentList.push(copiedComponent);
+  } else {
+    componentList.splice(index + 1, 0, copiedComponent);
+  }
+  draft.selectedId = copiedComponent.fe_id;
+}
+
 export const {
   addComponent,
   changeSelectedId,
@@ -129,6 +156,8 @@ export const {
   changeComponentTitle,
   toggleComponentLocked,
   moveComponent,
+  copySelectedComponent,
+  pasteCopiedComponent,
 } = surveySlice.actions;
 
 export default surveySlice.reducer;

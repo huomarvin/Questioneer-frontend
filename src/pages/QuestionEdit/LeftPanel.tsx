@@ -14,9 +14,12 @@ import {
   changeComponentHidden,
   changeComponentTitle,
   changeSelectedId,
+  moveComponent,
 } from '@/store/surveyReducer';
 import useGetComponentInfo from '@/hooks/useGetComponentInfo';
 import classnames from 'classnames';
+import SortableContainer from '@/components/DragSortable/SortableContainer';
+import SortableItem from '@/components/DragSortable/SortableItem';
 
 function GenComponent(config: ComponentConfType, index: number) {
   const { Component, title, type, defaultProps } = config;
@@ -94,8 +97,16 @@ function Layers() {
     if (!selectedId) return;
     dispatch(changeComponentTitle({ selectedId, title: newTitle }));
   }
+
+  function handleDragEnd(oldIndex: number, newIndex: number) {
+    console.log('🚀 ~ file: LeftPanel.tsx:102 ~ handleDragEnd ~ oldIndex:', oldIndex);
+    dispatch(moveComponent({ oldIndex, newIndex }));
+  }
+
+  const componentListWithId = componentList.map(c => ({ ...c, id: c.fe_id }));
+
   return (
-    <div>
+    <SortableContainer items={componentListWithId} onDragEnd={handleDragEnd}>
       {componentList.map(component => {
         const { fe_id, title, isHidden, isLocked } = component;
         const hiddenBtnCls = classnames({
@@ -105,47 +116,46 @@ function Layers() {
           'opacity-20 hover:opacity-100': !isLocked,
         });
         return (
-          <div
-            key={fe_id}
-            className="flex flex-row justify-between mt-4 cursor-pointer hover:bg-slate-100rounded border"
-          >
-            <div className="flex-1 p-3" onClick={() => handleTitleClick(fe_id)}>
-              {fe_id !== changingTitleId ? (
-                title
-              ) : (
-                <Input
-                  size="small"
-                  value={title}
-                  onChange={changeTitle}
-                  onPressEnter={() => setChangingTitleId('')}
-                  onBlur={() => setChangingTitleId('')}
-                />
-              )}
+          <SortableItem key={fe_id} id={fe_id}>
+            <div className="flex flex-row justify-between mt-4 cursor-pointer hover:bg-slate-100rounded border">
+              <div className="flex-1 p-3" onClick={() => handleTitleClick(fe_id)}>
+                {fe_id !== changingTitleId ? (
+                  title
+                ) : (
+                  <Input
+                    size="small"
+                    value={title}
+                    onChange={changeTitle}
+                    onPressEnter={() => setChangingTitleId('')}
+                    onBlur={() => setChangingTitleId('')}
+                  />
+                )}
+              </div>
+              <div className="p-3">
+                <Space>
+                  <Button
+                    size="small"
+                    shape="circle"
+                    className={hiddenBtnCls}
+                    icon={<EyeInvisibleOutlined />}
+                    type={isHidden ? 'primary' : 'text'}
+                    onClick={() => changeHidden(fe_id, !isHidden)}
+                  />
+                  <Button
+                    size="small"
+                    shape="circle"
+                    className={lockBtnCls}
+                    icon={<LockOutlined />}
+                    type={isLocked ? 'primary' : 'text'}
+                    onClick={() => changeLocked(fe_id)}
+                  />
+                </Space>
+              </div>
             </div>
-            <div className="p-3">
-              <Space>
-                <Button
-                  size="small"
-                  shape="circle"
-                  className={hiddenBtnCls}
-                  icon={<EyeInvisibleOutlined />}
-                  type={isHidden ? 'primary' : 'text'}
-                  onClick={() => changeHidden(fe_id, !isHidden)}
-                />
-                <Button
-                  size="small"
-                  shape="circle"
-                  className={lockBtnCls}
-                  icon={<LockOutlined />}
-                  type={isLocked ? 'primary' : 'text'}
-                  onClick={() => changeLocked(fe_id)}
-                />
-              </Space>
-            </div>
-          </div>
+          </SortableItem>
         );
       })}
-    </div>
+    </SortableContainer>
   );
 }
 

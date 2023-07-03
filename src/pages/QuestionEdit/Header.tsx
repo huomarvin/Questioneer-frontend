@@ -119,7 +119,7 @@ const Header = () => {
 
   return (
     <div className="h-16 bg-slate-100 flex items-center justify-between">
-      <div>
+      <div className="w-64">
         <Space>
           <Button type="link" icon={<LeftOutlined />} onClick={() => nav(-1)}>
             返回
